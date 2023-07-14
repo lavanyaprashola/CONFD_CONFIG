@@ -23,7 +23,7 @@ jobs:
       - name: Generate configuration file
         run: |
           mkdir -p confd/config
-          confd -onetime -backend env -confdir confd -config-file confd/conf.d/myconfig.toml
+          confd -onetime -backend env -confdir confd -config-file myapp/confd/conf.d/myconfig.toml
 
       - name: Build and test PHP application
         run: |
