@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install confd
+        run: |
+          wget https://github.com/kelseyhightower/confd/releases/download/v0.16.0/confd-0.16.0-linux-amd64
+          mv confd-0.16.0-linux-amd64 confd
+          chmod +x confd
+          sudo mv confd /usr/local/bin/
+
+      - name: Generate configuration file
+        run: |
+          mkdir -p confd/config
+          confd -onetime -backend env -confdir confd -config-file confd/conf.d/myconfig.toml
+
+      - name: Build and test PHP application
+        run: |
+          cd myapp
+          php -v
+          phpunit
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: myapp/tests/results/
