@@ -23,9 +23,8 @@ jobs:
       - name: Create ZIP file
         run: |      
              cd ${{ github.workspace }}
-             ls -R ${{ github.workspace }}
-             zip -r --exclude-empty ${{ github.workspace }}/mobile-web.zip . -i .
-             
+             ls -R
+             zip -r ${{ github.workspace }}/mobile-web.zip . -i . -x@excluded_files.txt README.md .gitignore
                
       - name: Copy files to S3 (DEV)
         if: ${{ github.ref == 'refs/heads/dev' }}
