@@ -21,9 +21,10 @@ jobs:
             aws-secret-access-key: ${{ secrets.SECRET_KEY }}
             aws-region: eu-west-1
       - name: Create ZIP file
-        run: |
-               cd ${{ github.workspace }}
-               zip -r ${{ github.workspace }}/mobile-web.zip . 
+        run: |      
+             cd ${{ github.workspace }}
+             zip -r ${{ github.workspace }}/mobile-web.zip .
+             ls -l
                
       - name: Copy files to S3 (DEV)
         if: ${{ github.ref == 'refs/heads/dev' }}
