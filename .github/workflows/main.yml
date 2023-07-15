@@ -21,6 +21,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install awscli -y
+          
       - name: Create ZIP file
         run: |
            cd ${{ github.workspace }}
