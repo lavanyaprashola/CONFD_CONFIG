@@ -36,3 +36,4 @@ jobs:
           BUCKET_NAME: ${{ github.ref == 'refs/heads/prod' && secrets.BUCKET_NAME }}
         run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ env.BUCKET_NAME }}/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
 
+
