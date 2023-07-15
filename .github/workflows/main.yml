@@ -27,13 +27,13 @@ jobs:
                
       - name: Copy files to S3 (DEV)
         if: ${{ github.ref == 'refs/heads/dev' }}
-        env : 
-             name : dev
-        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ secrets.BUCKET_NAME }}/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
+        env:
+         DEV_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ env.DEV_BUCKET_NAME }}/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
                                                                    
       - name: Copy files to S3 (PROD)
         if: ${{ github.ref == 'refs/heads/prod' }}
         env : 
-             name : prod
-        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ secrets.BUCKET_NAME }}${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
+          PROD_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ env.PROD_BUCKET_NAME }}${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
                                                               
