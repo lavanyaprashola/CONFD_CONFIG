@@ -10,12 +10,7 @@ jobs:
     steps :
       - name: Checkout repository
         uses: actions/checkout@v2  
-        
-  Copy_files_to_S3 :
-    name : lavanya
-    needs : [Checkout]
-    runs-on: ubuntu-latest
-    steps :
+      
       - name: Configure AWS Credentials Action For GitHub Actions
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -32,9 +27,13 @@ jobs:
                
       - name: Copy files to S3 (DEV)
         if: ${{ github.ref == 'refs/heads/dev' }}
-        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://lprashola/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
+        env : 
+             name : dev
+        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ secrets.BUCKET_NAME }}/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
                                                                    
       - name: Copy files to S3 (PROD)
         if: ${{ github.ref == 'refs/heads/prod' }}
-        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://lprashola-2/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
+        env : 
+             name : prod
+        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ secrets.BUCKET_NAME }}${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
                                                               
