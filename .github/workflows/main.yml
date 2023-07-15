@@ -23,8 +23,8 @@ jobs:
       - name: Create ZIP file
         run: |      
              cd ${{ github.workspace }}
-             ls -l
-             zip -r ${{ github.workspace }}/mobile-web.zip .
+             ls 
+             zip -r ${{ github.workspace }}/mobile-web.zip . -i .
              
                
       - name: Copy files to S3 (DEV)
