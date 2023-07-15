@@ -10,15 +10,16 @@ jobs:
     steps :
       - name: Checkout repository
         uses: actions/checkout@v2  
+      
+  Copy_to_files :
+      runs-on: ubuntu-latest
+      steps:
       - name: Configure AWS Credentials Action For GitHub Actions
         uses: aws-actions/configure-aws-credentials@v2
         with:
             aws-access-key-id: ${{ secrets.ACCESS_KEY }}
             aws-secret-access-key: ${{ secrets.SECRET_KEY }}
             aws-region: eu-west-1
-  Copy_to_files :
-      runs-on: ubuntu-latest
-      steps:
       - name: Create ZIP file
         run: |
               cd ${{ github.workspace }}
