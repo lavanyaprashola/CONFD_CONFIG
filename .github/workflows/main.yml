@@ -22,13 +22,8 @@ jobs:
             aws-region: eu-west-1
       - name: Create ZIP file
         run: |
-              cd ${{ github.workspace }}
-              ls  -l
-              excluded_files=$(find . -type f \
-                    ! -name 'README.md' \
-                    -exec echo {} \;)
-               echo "$excluded_files" > excluded_files.txt
-               zip -r ${{ github.workspace }}/mobile-web.zip . -i . -x@excluded_files.txt README.md .gitignore
+               cd ${{ github.workspace }}
+               zip -r ${{ github.workspace }}/mobile-web.zip . 
                
       - name: Copy files to S3 (DEV)
         if: ${{ github.ref == 'refs/heads/dev' }}
@@ -37,4 +32,4 @@ jobs:
       - name: Copy files to S3 (PROD)
         if: ${{ github.ref == 'refs/heads/prod' }}
         run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://lprashola-2/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
-                                                                    
+                                                              
