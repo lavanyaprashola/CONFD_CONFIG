@@ -21,7 +21,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install awscli -y
-          
       - name: Create ZIP file
         run: |
            cd ${{ github.workspace }}
@@ -38,4 +37,4 @@ jobs:
         env:
              PROD_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
         run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ env.PROD_BUCKET_NAME }}${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
-                                                              
+
