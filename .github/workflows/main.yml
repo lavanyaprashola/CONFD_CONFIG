@@ -24,16 +24,28 @@ jobs:
            ls -l
            zip -r ${{ github.workspace }}/mobile-web.zip . -x ./README.md .git\*
 
-               
+  Deploy_to_dev :
+
+    name : cloudfront deploy to dev
+    needs : [Checkout]
+    runs-on: ubuntu-latest
+    if :  github.event.ref  == 'refs/heads/dev'
+    environment :
+        name : dev
+    steps :
       - name: Copy files to S3 (DEV)
         if: ${{ github.ref == 'refs/heads/dev' }}
-        env:
-         DEV_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
-        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ env.DEV_BUCKET_NAME }}/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
-                                                                   
+        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ env.BUCKET_NAME }}/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
+  Deploy_to_prod :
+
+    name : cloudfront deploy to prod
+    needs : [Checkout]
+    runs-on: ubuntu-latest
+    if :  github.event.ref  == 'refs/heads/prod'
+    environment :
+        name : prod
+    steps :                                                         
       - name: Copy files to S3 (PROD)
         if: ${{ github.ref == 'refs/heads/prod' }}
-        env : 
-          PROD_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
-        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ env.PROD_BUCKET_NAME }}${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
+        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ env.BUCKET_NAME }}${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
                                                               
