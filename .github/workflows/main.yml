@@ -10,24 +10,31 @@ jobs:
     steps :
       - name: Checkout repository
         uses: actions/checkout@v2  
-  Copy_to_files :
-      runs-on: ubuntu-latest
-      steps:
+      
+      - name: Configure AWS Credentials Action For GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+            aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+            aws-secret-access-key: ${{ secrets.SECRET_KEY }}
+            aws-region: eu-west-1
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install awscli -y
       - name: Create ZIP file
         run: |
-              excluded_files=$(find . -type f \
-                    ! -name '.gitignore' \
-                    ! -name 'README.md' \
-                    -exec echo {} \;)
-               echo "$excluded_files" > excluded_files.txt
-               cd ${{ github.workspace }}/
-               zip -r ${{ github.workspace }}/mobile-web.zip  -x@excluded_files.txt README.md .gitignore
-               ls -l
+           cd ${{ github.workspace }}
+           ls -l
+           zip -r ${{ github.workspace }}/mobile-web.zip . -x ./README.md .git\*
       - name: Copy files to S3 (DEV)
         if: ${{ github.ref == 'refs/heads/dev' }}
-        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://lprashola/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
-                                                                   
+        env:
+             DEV_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ env.DEV_BUCKET_NAME }}/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
+                                                          
       - name: Copy files to S3 (PROD)
         if: ${{ github.ref == 'refs/heads/prod' }}
-        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://lprashola/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
-                                                                    
+        env:
+             PROD_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ env.PROD_BUCKET_NAME }}${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
+                                                   
