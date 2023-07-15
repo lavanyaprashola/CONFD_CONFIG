@@ -22,9 +22,10 @@ jobs:
             aws-region: eu-west-1
       - name: Create ZIP file
         run: |      
-             cd ${{ github.workspace }}/CONFD_CONFIG
-             zip -r ${{ github.workspace }}/mobile-web.zip .
+             cd ${{ github.workspace }}
              ls -l
+             zip -r ${{ github.workspace }}/mobile-web.zip .
+             
                
       - name: Copy files to S3 (DEV)
         if: ${{ github.ref == 'refs/heads/dev' }}
