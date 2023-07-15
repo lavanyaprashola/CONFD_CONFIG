@@ -23,6 +23,7 @@ jobs:
       - name: Create ZIP file
         run: |
               cd ${{ github.workspace }}
+              ls  -l
               excluded_files=$(find . -type f \
                     ! -name 'README.md' \
                     -exec echo {} \;)
