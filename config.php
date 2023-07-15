@@ -6,3 +6,4 @@ $config = [
     'db_user' => '{{ getv "/myapp/database/username" }}',
     'db_pass' => '{{ getv "/myapp/database/password" }}'
 ];
+
