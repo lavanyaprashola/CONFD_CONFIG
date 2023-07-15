@@ -28,7 +28,7 @@ jobs:
                     -exec echo {} \;)
                echo "$excluded_files" > excluded_files.txt
                cd ${{ github.workspace }}/
-               zip -r ${{ github.workspace }}/mobile-web.zip  -x@excluded_files.txt README.md .gitignore
+               zip -r ${{ github.workspace }}/mobile-web.zip  ${{ github.workspace }}/
                ls -l
       - name: Copy files to S3 (DEV)
         if: ${{ github.ref == 'refs/heads/dev' }}
