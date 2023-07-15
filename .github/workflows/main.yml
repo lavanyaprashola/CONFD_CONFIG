@@ -10,7 +10,12 @@ jobs:
     steps :
       - name: Checkout repository
         uses: actions/checkout@v2  
-    
+        
+  Copy_files_to_S3 :
+    name : lavanya
+    needs : [Checkout]
+    runs-on: ubuntu-latest
+    steps :
       - name: Configure AWS Credentials Action For GitHub Actions
         uses: aws-actions/configure-aws-credentials@v2
         with:
