@@ -10,21 +10,20 @@ jobs:
     steps :
       - name: Checkout repository
         uses: actions/checkout@v2  
-      
-  Copy_to_files :
-      runs-on: ubuntu-latest
-      steps:
+    
       - name: Configure AWS Credentials Action For GitHub Actions
         uses: aws-actions/configure-aws-credentials@v2
         with:
             aws-access-key-id: ${{ secrets.ACCESS_KEY }}
             aws-secret-access-key: ${{ secrets.SECRET_KEY }}
             aws-region: eu-west-1
+            
       - name: Create ZIP file
         run: |
-              
-               zip -r ${{ github.workspace }}/mobile-web.zip . -x README.md
-               ls -l
+           cd ${{ github.workspace }}
+           ls -l
+           zip -r ${{ github.workspace }}/mobile-web.zip . -x ./README.md
+
                
       - name: Copy files to S3 (DEV)
         if: ${{ github.ref == 'refs/heads/dev' }}
