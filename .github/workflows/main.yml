@@ -29,6 +29,7 @@ jobs:
             echo "::set-output name=env_name::prod"
           else
             echo "environment is not specified"
+          fi
       - name: Create ZIP file
         run: |
            cd ${{ github.workspace }}
