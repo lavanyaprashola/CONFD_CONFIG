@@ -9,20 +9,28 @@ on:
 jobs:
  my-job:
    runs-on: ubuntu-latest
-   environment: dev
+   env:
+      ENVIRONMENT: ${{ steps.set_environment.outputs.env_name }}
+      
    steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Configure AWS Credentials Action For GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+            aws-access-key-id: ${{ secrets.ACCESS_KEY}}
+            aws-secret-access-key: ${{ secrets.SECRET_KEY }}
+            aws-region: ${{ secrets.REGION }}
       - name: Set environment name
         id: set_environment
         run: |
           if [[ ${{ github.ref }} == 'refs/heads/dev' ]]; then
-            echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+            echo "::set-output name=env_name::dev"
           elif [[ ${{ github.ref }} == 'refs/heads/prod' ]]; then
-            echo "ENVIRONMENT=dev" >> $GITHUB_ENV 
+            echo "::set-output name=env_name::prod"
           else
             echo "environment is not specified"
-          fi
+ 
       - name: Create ZIP file
         run: |
            cd ${{ github.workspace }}
