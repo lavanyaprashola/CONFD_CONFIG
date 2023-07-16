@@ -37,5 +37,5 @@ jobs:
            zip -r ${{ github.workspace }}/mobile-web.zip . -x ./README.md .git\*
       - name: Copy files to S3 (DEV)
         env:
-            NAME: ${{ secrets.DEV_BUCKET_NAME }}
-        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://$BUCKET_NAME/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
+            NAME: ${{ secrets.BUCKET_NAME }}
+        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://$NAME/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
