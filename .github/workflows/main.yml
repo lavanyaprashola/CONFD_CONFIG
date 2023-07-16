@@ -1,3 +1,5 @@
+name: My Workflow
+
 on:
   push:
     branches:
@@ -26,21 +28,18 @@ jobs:
            cd ${{ github.workspace }}
            ls -l
            zip -r ${{ github.workspace }}/mobile-web.zip . -x ./README.md .git\*
+
       - name: Set environment-specific secret
+        id: set_secret
         run: |
           if [[ ${{ github.ref }} == 'refs/heads/dev' ]]; then
-            echo "BUCKET_NAME=${{ secrets.BUCKET_NAME }}" >> $GITHUB_ENV
+            echo "::set-output name=bucket_name::${{ secrets.DEV_BUCKET_NAME }}"
           elif [[ ${{ github.ref }} == 'refs/heads/prod' ]]; then
-            echo "BUCKET_NAME=${{ secrets.BUCKET_NAME }}" >> $GITHUB_ENV
+            echo "::set-output name=bucket_name::${{ secrets.PROD_BUCKET_NAME }}"
           fi
 
       - name: Copy files to S3 (DEV)
-        if: ${{ github.ref == 'refs/heads/dev' }}
-        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://$BUCKET_NAME/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
-                                                          
-      - name: Copy files to S3 (PROD)
-        if: ${{ github.ref == 'refs/heads/prod' }}
-        env:
-             PROD_BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
-        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://$BUCKET_NAME/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
+       
+        run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ steps.set_secret.outputs.bucket_name }}/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
 
+       
