@@ -1,46 +1,31 @@
-name: My Workflow
+  name: Set Environment Variables
 
 on:
-  push:
-    branches:
-      - dev
-      - prod
-   
+push:
+branches:
+- develop
+- master
+
 jobs:
-  Checkout:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      
-      - name: Configure AWS Credentials Action For GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.SECRET_KEY }}
-          aws-region: eu-west-1
-      
-      - name: Install AWS CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install awscli -y
-      
-      - name: Create ZIP file
-        run: |
-          cd ${{ github.workspace }}
-          ls -l
-          zip -r ${{ github.workspace }}/mobile-web.zip . -x ./README.md .git\*
-      
-      - name: Set environment-specific secret
-        id: set_secret
-        run: |
-          if [[ ${{ github.ref }} == 'refs/heads/dev' ]]; then
-            echo "::set-output name=bucket_name::${{ secrets.DEV_BUCKET_NAME }}"
-          elif [[ ${{ github.ref }} == 'refs/heads/prod' ]]; then
-            echo "::set-output name=bucket_name::${{ secrets.PROD_BUCKET_NAME }}"
-          fi
-      
-      - name: Copy files to S3 (DEV)
-        if: ${{ github.ref == 'refs/heads/dev' }}
-        run: |
-          aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://${{ steps.set_secret.outputs.bucket_name }}/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
+set_environment:
+runs-on: ubuntu-latest
+
+steps:
+- name: Checkout code
+uses: actions/checkout@v2
+
+- name: Set env to staging
+if: endsWith(github.ref, '/develop')
+run: |
+echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+
+- name: Set env to production
+if: endsWith(github.ref, '/master')
+run: |
+echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+echo "BUCKET_NAME =${{secrets.DEV_BUCKET_NAME }} >> $GITHUB_ENV
+
+- name: Display environment variable
+run: |
+echo $ENVIRONMENT
+echo $BUCKET_NAME 
