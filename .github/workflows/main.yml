@@ -3,8 +3,8 @@ name: Set Environment Variables
 on:
   push:
     branches:
-     - develop
-     - master
+     - dev
+     - prod
 
 jobs:
  set_environment:
