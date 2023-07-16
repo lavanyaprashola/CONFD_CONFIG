@@ -9,8 +9,7 @@ on:
 jobs:
   Checkout:
     runs-on: ubuntu-latest
-    env:
-      ENVIRONMENT: ${{ steps.set_environment.outputs.env_name }}
+ 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
