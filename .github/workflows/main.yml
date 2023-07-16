@@ -62,3 +62,5 @@ jobs:
         env:
             NAME: ${{ secrets.BUCKET_NAME }}
         run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://$NAME/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip 
+      - name : Deploy to cloudfront
+        run: aws s3 sync ${{ github.workspace }} s3://$NAME/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip  --delete --exclude "README.md" --exclude ".git*"
