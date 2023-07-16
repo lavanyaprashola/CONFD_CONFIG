@@ -9,7 +9,12 @@ on:
 jobs:
  my-job:
    runs-on: ubuntu-latest
-   steps:
+   environment: ${{ needs.environments.outputs.env_name }}
+ environments:
+    runs-on: ubuntu-latest
+    outputs:
+      env_name: ${{ steps.set_environment.outputs.env_name }}
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Configure AWS Credentials Action For GitHub Actions
@@ -23,9 +28,9 @@ jobs:
         id: set_environment
         run: |
           if [[ ${{ github.ref }} == 'refs/heads/dev' ]]; then
-            echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+           echo "::set-output name=env_name::dev"
           elif [[ ${{ github.ref }} == 'refs/heads/prod' ]]; then
-            echo "ENVIRONMENT=dev" >> $GITHUB_ENV 
+            echo "::set-output name=env_name::prod" 
           else
             echo "environment is not specified"
           fi
