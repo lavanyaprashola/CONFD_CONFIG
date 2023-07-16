@@ -1,31 +1,31 @@
-  name: Set Environment Variables
+name: Set Environment Variables
 
 on:
-push:
-branches:
-- develop
-- master
+  push:
+    branches:
+     - develop
+     - master
 
 jobs:
-set_environment:
-runs-on: ubuntu-latest
+ set_environment:
+   runs-on: ubuntu-latest
 
-steps:
-- name: Checkout code
-uses: actions/checkout@v2
+   steps:
+   - name: Checkout code
+     uses: actions/checkout@v2
 
-- name: Set env to staging
-if: endsWith(github.ref, '/develop')
-run: |
-echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+   - name: Set env to staging
+     if: endsWith(github.ref, '/develop')
+     run: |
+        echo "ENVIRONMENT=dev" >> $GITHUB_ENV
 
-- name: Set env to production
-if: endsWith(github.ref, '/master')
-run: |
-echo "ENVIRONMENT=prod" >> $GITHUB_ENV
-echo "BUCKET_NAME =${{secrets.DEV_BUCKET_NAME }} >> $GITHUB_ENV
+   - name: Set env to production
+     if: endsWith(github.ref, '/master')
+     run: |
+       echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+       echo "BUCKET_NAME =${{secrets.DEV_BUCKET_NAME }} >> $GITHUB_ENV
 
-- name: Display environment variable
-run: |
-echo $ENVIRONMENT
-echo $BUCKET_NAME 
+   - name: Display environment variable
+     run: |
+        echo $ENVIRONMENT
+        echo $BUCKET_NAME 
