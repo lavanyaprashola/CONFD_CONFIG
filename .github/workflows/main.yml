@@ -9,7 +9,9 @@ on:
 jobs:
  my-job:
    runs-on: ubuntu-latest
-   environment:  ${{ if startsWith(github.ref, 'refs/heads/dev') }}dev${{ else if startsWith(github.ref, 'refs/heads/prod') }}prod${{ else }}${{ end }}
+   env:
+      ENVIRONMENT: ${{ if startsWith(github.ref, 'refs/heads/dev') }}dev${{ else }}prod${{ endif }}
+   environment: $ENVIRONMENT
    steps:
       - name: Checkout repository
         uses: actions/checkout@v2
