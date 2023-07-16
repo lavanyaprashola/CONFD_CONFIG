@@ -7,19 +7,20 @@ on:
       - prod
 
 jobs:
-  set_environment:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
+ my-job:
+   runs-on: ubuntu-latest
+   environment: dev
+  
+   steps :
       - name: Set env to staging
+        shell: bash
+        env:
+            NAME: ${{ secrets.DEV_BUCKET_NAME }}
         run: |
-          echo "ENVIRONMENT=dev" >> $GITHUB_ENV
-          echo "BUCKET_NAME=${{ env.DEV_BUCKET_NAME }}" >> $GITHUB_ENV
-
+          echo "$NAME"   
       - name: Display environment variables
         run: |
           echo $ENVIRONMENT
           echo $BUCKET_NAME
+
+
