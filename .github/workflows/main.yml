@@ -10,6 +10,9 @@ jobs:
  my-job:
    runs-on: ubuntu-latest
    environment: ${{ needs.environments.outputs.env_name }}
+   steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
  environments:
     runs-on: ubuntu-latest
     outputs:
