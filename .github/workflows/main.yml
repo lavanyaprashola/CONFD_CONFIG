@@ -18,9 +18,9 @@ jobs:
         id: set_environment
         run: |
           if [[ ${{ github.ref }} == 'refs/heads/dev' ]]; then
-            echo "::set-output name=env_name::dev"
+            echo "ENVIRONMENT=dev" >> $GITHUB_ENV
           elif [[ ${{ github.ref }} == 'refs/heads/prod' ]]; then
-            echo "::set-output name=env_name::prod"
+            echo "ENVIRONMENT=dev" >> $GITHUB_ENV 
           else
             echo "environment is not specified"
           fi
