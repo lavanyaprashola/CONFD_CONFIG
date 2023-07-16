@@ -1,3 +1,5 @@
+name: Upload to S3 and Invalidate CloudFront
+
 on:
   push:
     branches:
@@ -7,32 +9,25 @@ on:
 jobs:
   Checkout:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ steps.set_environment.outputs.env_name }}
     steps :
       - name: Checkout repository
         uses: actions/checkout@v2  
-      
-      - name: Configure AWS Credentials Action For GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-            aws-access-key-id: ${{ secrets.ACCESS_KEY }}
-            aws-secret-access-key: ${{ secrets.SECRET_KEY }}
-            aws-region: eu-west-1
-      - name: Install AWS CLI
+      - name: Set environment name
+        id: set_environment
         run: |
-          sudo apt-get update
-          sudo apt-get install awscli -y
+          if [[ ${{ github.ref }} == 'refs/heads/dev' ]]; then
+            echo "::set-output name=env_name::dev"
+          elif [[ ${{ github.ref }} == 'refs/heads/prod' ]]; then
+            echo "::set-output name=env_name::prod"
+          else
+            echo "environment is not specified"
       - name: Create ZIP file
         run: |
            cd ${{ github.workspace }}
            ls -l
            zip -r ${{ github.workspace }}/mobile-web.zip . -x ./README.md .git\*
       - name: Copy files to S3 (DEV)
-       
         env:
-          BUCKET_NAME: ${{secrets.DEV_BUCKET_NAME}}
+            NAME: ${{ secrets.DEV_BUCKET_NAME }}
         run:  aws s3 cp ${{ github.workspace }}/mobile-web.zip s3://$BUCKET_NAME/${{ github.repository }}/${{ github.run_number }}/mobile-web.zip
-                                                          
-
-
-
