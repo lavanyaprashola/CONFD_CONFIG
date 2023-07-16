@@ -9,17 +9,10 @@ on:
 jobs:
   Checkout:
     runs-on: ubuntu-latest
-    environment: ${{ needs.environments.outputs.env_name }}
+    environment: ${{ steps.set_environment.outputs.env_name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-  environments:
-    runs-on: ubuntu-latest
-    outputs:
-      env_name: ${{ steps.set_environment.outputs.env_name }}
-    steps :
-      - name: Checkout repository
-        uses: actions/checkout@v2  
       - name: Set environment name
         id: set_environment
         run: |
