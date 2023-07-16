@@ -18,13 +18,13 @@ jobs:
      if: endsWith(github.ref, '/dev')
      run: |
         echo "ENVIRONMENT=dev" 
-        echo "BUCKET_NAME =${{env.DEV_BUCKET_NAME }}" 
+        echo "BUCKET_NAME =${{ env.DEV_BUCKET_NAME }}" 
 
    - name: Set env to production
      if: endsWith(github.ref, '/prod')
      run: |
        echo "ENVIRONMENT=prod" >> $GITHUB_ENV
-       echo "BUCKET_NAME =${{secrets.PROD_BUCKET_NAME }} >> $GITHUB_ENV
+       echo "BUCKET_NAME =${{ env.PROD_BUCKET_NAME }} >> $GITHUB_ENV
 
    - name: Display environment variable
      run: |
