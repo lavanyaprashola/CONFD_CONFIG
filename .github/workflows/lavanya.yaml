@@ -37,12 +37,19 @@ jobs:
           if: ${{ needs.Checkout.outputs.build_status == 'failure' || needs.validate.outputs.build_status == 'failure' }}
           run: |
            echo"
-            "Build Status: ${{ job.status }}"
-             "Job: ${{ github.run_id }}"
-             "Build Number: ${{ github.run_number }}"
-              "Repository: ${{ github.repository }}"
-              "Workflow: ${{ github.workflow }}"
-               "More info at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks" "
+                                                              "Build Status: ${{ job.status }}"
+                             "Job: ${{ github.run_id }}"
+                        "Build Number: ${{ github.run_number }}"
+                             "Repository: ${{ github.repository }}"
+                              "Repository Owner: ${{ github.repository_owner }}"
+                        "Default Branch: ${{ github.head_ref }}"
+                       "Workflow: ${{ github.workflow }}"
+                              "Event Type: ${{ github.event_name }}"
+                            "Triggered By: ${{ github.actor }}"
+                             "Source IP: ${{ github.event.client_ip }}"
+                                   "Commit SHA: ${{ github.sha }}"
+                            "Commit Message: ${{ github.event.head_commit.message }}"
+                          "More info at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks"
           
         - name: AWS Publish notifications FOR SUCCESS
           if: ${{ needs. Checkout.outputs.build_status == 'success' || needs.validate.outputs.build_status == 'success' }}
