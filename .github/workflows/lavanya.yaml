@@ -74,6 +74,6 @@ jobs:
                                    "Deployment Status: ${{ needs.DEV-DEPLOY.outputs.deployment_status || 'N/A' }}"
                                       "Deployed Branch: ${{ github.ref | replace('refs/heads/', '') || 'N/A' }}"
                                      "Deployment Time: ${{ needs.DEV-DEPLOY.outputs.deployment_time || 'N/A' }}"
-                                "More info at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks"
+                                "More info at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks""
 
       
