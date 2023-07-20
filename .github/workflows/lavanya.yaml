@@ -25,6 +25,10 @@ jobs:
            run : echo "hellosdfg"
   lavanya:
      runs-on: ubuntu-latest
+     if : always ()
+     needs :
+        - Checkout
+        - validate
      steps :
         - name: Checkout repository
           uses: actions/checkout@v2 
