@@ -71,10 +71,10 @@ jobs:
                               "Commit Message: ${{ github.event.head_commit.message }}"
                               "Start Time: ${{ github.run_started_at }}"
                                "End Time: ${{ github.run_completed_at }}"
-                               "Time Taken: ${{ steps.build_time.outputs.time_taken }}"
-                               "Deployment Status: ${{ needs.DEV-DEPLOY.outputs.deployment_status }}"
-                                   "Deployment Target: DEV"
-                                    "Deployment Time: ${{ needs.DEV-DEPLOY.outputs.deployment_time }}"
+                                "Time Taken: ${{ steps.build_time.outputs.time_taken || 'N/A' }}"
+                                   "Deployment Status: ${{ needs.DEV-DEPLOY.outputs.deployment_status || 'N/A' }}"
+                                       "Deployment Target: DEV"
+                                     "Deployment Time: ${{ needs.DEV-DEPLOY.outputs.deployment_time || 'N/A' }}"
                                 "More info at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks"
 
       
