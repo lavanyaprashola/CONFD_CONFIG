@@ -52,6 +52,7 @@ jobs:
              "Job: ${{ github.run_id }}"
               "Build Number: ${{ github.run_number }}"
                "Repository: ${{ github.repository }}"
+                 "Triggered By: ${{ github.actor }}"
               "Workflow: ${{ github.workflow }}"
               "More info at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks" "
 
