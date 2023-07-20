@@ -7,6 +7,8 @@ on:
 jobs:
   Checkout:
     runs-on: ubuntu-latest
+    outputs :
+          build_status: ${{ job.status }}
     steps :
       - name: Checkout repository
         uses: actions/checkout@v2  
@@ -14,6 +16,8 @@ jobs:
         run : echo "hello"
   validate :
        runs-on: ubuntu-latest
+       outputs :
+          build_status: ${{ job.status }} 
        steps :
          - name: Checkout repository
            uses: actions/checkout@v2  
@@ -24,6 +28,7 @@ jobs:
      steps :
         - name: Checkout repository
           uses: actions/checkout@v2 
+          
         - name : sdfgn
           if: ${{ needs.Checkout.outputs.build_status == 'failure' || needs.validate.outputs.build_status == 'failure' }}
           run: |
