@@ -56,7 +56,7 @@ jobs:
         - name: AWS Publish notifications FOR SUCCESS
           if: ${{ needs. Checkout.outputs.build_status == 'success' || needs.validate.outputs.build_status == 'success' }}
           run: |
-           echo"
+                echo"
                        SUBJECT: "GitHub Actions Build: ${{ github.repository }} ${{ github.job }} is ${{ job.status }}"
                        MESSAGE: | 
                                       "Job: ${{ github.run_id }}"
@@ -74,6 +74,6 @@ jobs:
                                          "Deployment Status: ${{ needs.DEV-DEPLOY.outputs.deployment_status }}"
                                           "Deployment Target: DEV"
                                       "Deployment Time: ${{ needs.DEV-DEPLOY.outputs.deployment_time }}"
-                                               "More info at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks"
+                                               "More info at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks""
                                                                                                                                                                                        "Build Status: ${{ job.status }}"
                                                                   
