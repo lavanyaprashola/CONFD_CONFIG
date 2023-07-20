@@ -1,1 +1,48 @@
-l
+on:
+  push:
+    branches:
+      - dev
+      - prod
+   
+jobs:
+  Checkout:
+    runs-on: ubuntu-latest
+    steps :
+      - name: Checkout repository
+        uses: actions/checkout@v2  
+      - name : sdf
+        run : echo "hello"
+  validate :
+       runs-on: ubuntu-latest
+       steps :
+         - name: Checkout repository
+           uses: actions/checkout@v2  
+         - name : sdfsdf
+           run : echo "hellosdfg"
+  lavanya:
+     runs-on: ubuntu-latest
+     steps :
+        - name: Checkout repository
+          uses: actions/checkout@v2 
+        - name : sdfgn
+          if: ${{ needs.Checkout.outputs.build_status == 'failure' || needs.validate.outputs.build_status == 'failure' }}
+          run: |
+           echo"
+            "Build Status: ${{ job.status }}"
+             "Job: ${{ github.run_id }}"
+             "Build Number: ${{ github.run_number }}"
+              "Repository: ${{ github.repository }}"
+              "Workflow: ${{ github.workflow }}"
+               "More info at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks" "
+          
+        - name: AWS Publish notifications FOR SUCCESS
+          if: ${{ needs. Checkout.outputs.build_status == 'success' || needs.validate.outputs.build_status == 'success' }}
+          run: |
+           echo"
+             "Build Status: ${{ job.status }}"
+             "Job: ${{ github.run_id }}"
+              "Build Number: ${{ github.run_number }}"
+               "Repository: ${{ github.repository }}"
+              "Workflow: ${{ github.workflow }}"
+              "More info at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks" "
+
