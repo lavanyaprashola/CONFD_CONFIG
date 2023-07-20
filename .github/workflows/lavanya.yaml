@@ -72,7 +72,7 @@ jobs:
                                "End Time: ${{ github.run_completed_at }}"
                                 "Time Taken: ${{ steps.build_time.outputs.time_taken || 'N/A' }}"
                                    "Deployment Status: ${{ needs.DEV-DEPLOY.outputs.deployment_status || 'N/A' }}"
-                                      "Deployed Branch: ${{ github.ref | replace('refs/heads/', '') || 'N/A' }}"
+                                      "Deployed Branch: ${{ github.ref}}"
                                      "Deployment Time: ${{ needs.DEV-DEPLOY.outputs.deployment_time || 'N/A' }}"
                                 "More info at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks""
 
