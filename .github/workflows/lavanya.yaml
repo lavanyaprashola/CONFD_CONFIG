@@ -53,7 +53,7 @@ jobs:
                             "Commit Message: ${{ github.event.head_commit.message }}"
                           "More info at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks""
         - name: AWS Publish notifications FOR SUCCESS
-          if: ${{ needs.Checkout.outputs.build_status == 'success' || needs.validate.outputs.build_status == 'success' }
+          if: ${{ needs.Checkout.outputs.build_status == 'success' || needs.validate.outputs.build_status == 'success' }}
           run :
                    |
                    echo  "
