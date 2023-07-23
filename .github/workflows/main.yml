@@ -1,26 +1,48 @@
-name: Set Environment Variables
+name: Upload to S3 and Invalidate CloudFront
 
 on:
   push:
     branches:
+
       - dev
       - prod
-
 jobs:
- my-job:
+
+ set_environment:
+
+     runs-on: ubuntu-latest
+     outputs:
+      environment: ${{ steps.set_env.outputs.environment }}
+    
+     steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Determine environment based on branch
+        id: set_env
+        run: |
+          if [ "$GITHUB_REF" == "refs/heads/master" ]; then
+            echo "prod" >> environment
+          elif [ "$GITHUB_REF" == "refs/heads/dev" ]; then
+            echo "dev" >> environment
+          else
+            echo "default" >> environment
+          fi
+
+ DEV-DEPLOY:
+ 
    runs-on: ubuntu-latest
-   environment: dev
-  
-   steps :
-      - name: Set env to staging
-        shell: bash
-        env:
-            NAME: ${{ secrets.DEV_BUCKET_NAME }}
+   outputs :  
+      environment: ${{ steps.set_env.outputs.environment }}
+   
+   steps:
+   
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name : Deploy to cloudfront
+        env: 
+           BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
         run: |
-          echo "$NAME"   
-      - name: Display environment variables
-        run: |
-          echo $ENVIRONMENT
-          echo $BUCKET_NAME
-
-
+           echo "$BUCKET_NAME"
+      
