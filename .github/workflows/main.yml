@@ -12,7 +12,7 @@ jobs:
 
      runs-on: ubuntu-latest
      outputs:
-      environment: ${{ steps.set_env.outputs.environment }}
+       environment: ${{ steps.set_env.outputs.environment }}
     
      steps:
 
@@ -33,7 +33,7 @@ jobs:
  DEV-DEPLOY:
  
    runs-on: ubuntu-latest
-   environment: ${{ steps.set_env.outputs.environment }}
+   environment: dev
    
    steps:
    
