@@ -35,7 +35,7 @@ jobs:
    runs-on: ubuntu-latest
    env:
       lav: ${{ needs.set_environment.outputs.env_value }}
-   environment: $lav
+   environment: "$lav"
    
    steps:
 
