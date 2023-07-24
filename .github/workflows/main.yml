@@ -34,8 +34,8 @@ jobs:
  
    runs-on: ubuntu-latest
    env:
-      ENVIRONMENT: ${{ needs.set_environment.outputs.env_value }}
-   environment: $ENVIRONMENT
+      lav: ${{ needs.set_environment.outputs.env_value }}
+   environment: $lav
    
    steps:
 
