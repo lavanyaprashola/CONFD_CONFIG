@@ -36,7 +36,7 @@ jobs:
    needs: set_environment
    env:
       lav: ${{ needs.set_environment.outputs.environment }}
-   environment: "$lav"
+   environment: $lav
    
    steps:
 
