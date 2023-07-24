@@ -12,7 +12,7 @@ jobs:
 
      runs-on: ubuntu-latest
      outputs:
-       environment: ${{ steps.set_env.outputs.environment }}
+       env_value: ${{ steps.set_env.outputs.environment }}
     
      steps:
 
@@ -30,13 +30,17 @@ jobs:
             echo "default" >> environment
           fi
 
- DEV-DEPLOY:
+ CloudFront_DEPLOY:
  
    runs-on: ubuntu-latest
-   environment: dev
+   env:
+      ENVIRONMENT: ${{ needs.set_environment.outputs.env_value }}
+   environment: $ENVIRONMENT
    
    steps:
    
+      - name: Checkout repository
+        uses: actions/checkout@v
       - name: Checkout repository
         uses: actions/checkout@v2
       - name : Deploy to cloudfront
