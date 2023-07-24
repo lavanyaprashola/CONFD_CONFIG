@@ -44,4 +44,5 @@ jobs:
         run: |
          echo $BUCKET
          echo ${{ needs.set_environment.outputs.environment }}
+         echo "https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks"
       
