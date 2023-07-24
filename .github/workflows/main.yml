@@ -38,9 +38,7 @@ jobs:
    environment: $ENVIRONMENT
    
    steps:
-   
-      - name: Checkout repository
-        uses: actions/checkout@v
+
       - name: Checkout repository
         uses: actions/checkout@v2
       - name : Deploy to cloudfront
