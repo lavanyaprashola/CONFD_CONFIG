@@ -33,10 +33,8 @@ jobs:
  CloudFront_DEPLOY:
  
    runs-on: ubuntu-latest
-   needs: set_environment
-   env:
-      lav: ${{ needs.set_environment.outputs.environment }}
-   environment: $lav
+   needs: set_environment  
+   environment: ${{ needs.set_environment.outputs.environment }}
    
    steps:
 
