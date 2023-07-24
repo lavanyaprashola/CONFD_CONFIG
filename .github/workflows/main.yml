@@ -11,8 +11,6 @@ jobs:
  set_environment:
 
      runs-on: ubuntu-latest
-     outputs:
-       environment: ${{ steps.set_env.outputs.environment }}
     
      steps:
 
@@ -23,13 +21,13 @@ jobs:
         id: set_env
         run: |
           if [ "$GITHUB_REF" == "refs/heads/prod" ]; then
-            echo "prod" >> environment
+            echo "environment=prod" >> "$GITHUB_ENV"
           elif [ "$GITHUB_REF" == "refs/heads/dev" ]; then
-            echo "dev" >> environment
-          else
-            echo "default" >> environment
+            echo "environment=dev" >> "$GITHUB_ENV"
           fi
-
+     outputs:
+       environment: ${{ env.environment }}
+    
  CloudFront_DEPLOY:
  
    runs-on: ubuntu-latest
