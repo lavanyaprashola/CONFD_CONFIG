@@ -43,5 +43,7 @@ jobs:
       - name : Deploy to cloudfront
         env: 
            BUCKET: ${{ secrets.BUCKET_NAME }}
-        run: echo $BUCKET
+        run: |
+         echo $BUCKET
+         echo ${{ needs.set_environment.outputs.environment }}
       
