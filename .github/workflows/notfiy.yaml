@@ -18,9 +18,6 @@ jobs:
       with:
         php-version: '8.0'
 
-    - name: Install dependencies
-      run: composer install
-
     # Add your build and test steps here if needed
 
     - name: Request Manual Approval
