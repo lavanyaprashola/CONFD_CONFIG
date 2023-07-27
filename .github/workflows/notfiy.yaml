@@ -1,0 +1,42 @@
+name: Deploy PHP Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.0'
+
+    - name: Install dependencies
+      run: composer install
+
+    # Add your build and test steps here if needed
+
+    - name: Request Manual Approval
+      uses: trstringer/manual-approval@v1
+      with:
+        secret: ${{ secrets.GITHUB_TOKEN }}
+        approvers: lavanya eswaran  # Replace with your GitHub username
+        minimum-approvals: 1
+        issue-title: "Deploying v1.3.5 to prod from staging"
+        issue-body: "Please approve or deny the deployment of version v1.3.5."
+        exclude-workflow-initiator-as-approver: false
+
+    - name: Deploy PHP application to production
+      # Add your deployment command here
+      run: |
+          echo "HELLO"
+        # For example, if you are deploying to a web server:
+        # rsync -avz --delete . user@example.com:/var/www/html/
+
