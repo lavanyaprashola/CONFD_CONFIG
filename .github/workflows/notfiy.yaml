@@ -23,13 +23,12 @@ jobs:
     - name: Request Manual Approval
       uses: trstringer/manual-approval@v1
       with:
-         secret: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-         approvers: lavanya-eswaran  # Replace with your GitHub username (use hyphens in the username)
-         minimum-approvals: 1
-         issue-title: "Deploying v1.3.5 to prod from staging"
-         issue-body: "Please approve or deny the deployment of version v1.3.5."
-         exclude-workflow-initiator-as-approver: false
-
+        secret: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        approvers: lavanya-eswaran
+        minimum-approvals: 1
+        issue-title: "Deploying v1.3.5 to prod from staging"
+        issue-body: "Please approve or deny the deployment of version v1.3.5."
+        exclude-workflow-initiator-as-approver: false
 
     - name: Deploy PHP application to production
       run: |
