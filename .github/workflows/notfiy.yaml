@@ -20,10 +20,14 @@ jobs:
 
       # Add your build and test steps here if needed
 
-      - name: Create Manual Approval Request
-        uses: repo-sync/pull-request@v2
+      - name: approval
+        uses: trstringer/manual-approval@v1
         with:
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          destination_branch: main
-          title: "Deploying v1.3.5 to prod from staging"
-          body: "Please approve or deny the deployment of version v1.3.5."
+         secret: ${{ github.TOKEN }}
+         approvers: lavanyaprashola
+         minimum-approvals: 1
+         issue-title: "Deploying v1.3.5 to prod from staging"
+         issue-body: "Please approve or deny the deployment of version v1.3.5."
+         exclude-workflow-initiator-as-approver: false
+         additional-approved-words: 'yes'
+         additional-denied-words: 'no'
