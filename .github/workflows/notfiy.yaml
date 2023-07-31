@@ -38,3 +38,4 @@ Respond \"approved\", \"approve\", \"lgtm\", \"yes\", \"yes\" to continue the wo
           exclude-workflow-initiator-as-approver: false
           additional-approved-words: 'approved, approve, lgtm, yes, yes'
           additional-denied-words: 'denied, deny, no, no'
+          
