@@ -18,13 +18,11 @@ jobs:
           FRESHSERVICE_SUBDOMAIN: senguntharengineeringcollehelpdesk
         run: |
           FRESHSERVICE_API_URL="https://senguntharengineeringcollehelpdesk.freshservice.com/"
-          
-          # Replace the placeholders with the details of your ticket
           SUMMARY="Issue title"
           DESCRIPTION="Issue description"
           PRIORITY=1
           STATUS=2
-
+          echo "---------------------------------"
           curl -X POST $FRESHSERVICE_API_URL \
             -H "Content-Type: application/json" \
             -H "Authorization: Basic $FRESHSERVICE_API_KEY" \
