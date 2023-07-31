@@ -1,0 +1,39 @@
+name: Create Freshservice Ticket
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_ticket:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create ticket in Freshservice
+        env:
+          FRESHSERVICE_API_KEY: ${{ secrets.FRESHSERVICE_API_KEY }}
+          FRESHSERVICE_SUBDOMAIN: senguntharengineeringcollehelpdesk
+        run: |
+          FRESHSERVICE_API_URL="https://senguntharengineeringcollehelpdesk.freshservice.com/"
+          
+          # Replace the placeholders with the details of your ticket
+          SUMMARY="Issue title"
+          DESCRIPTION="Issue description"
+          PRIORITY=1
+          STATUS=2
+
+          curl -X POST $FRESHSERVICE_API_URL \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Basic $FRESHSERVICE_API_KEY" \
+            -d '{
+              "helpdesk_ticket": {
+                "description": "'"$DESCRIPTION"'",
+                "subject": "'"$SUMMARY"'",
+                "priority": '$PRIORITY',
+                "status": '$STATUS'
+              }
+            }'
+            
