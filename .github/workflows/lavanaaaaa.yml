@@ -1,41 +1,45 @@
 name: Create Freshservice Ticket
-
 on:
   push:
     branches:
-      - main
+      - main  # Replace with your main branch name
+  # You can adjust the trigger as per your requirements
 
 jobs:
   create_ticket:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up environment
-        id: env
-        run: |
-          echo "summary=${{ github.event.head_commit.message }}" >> $GITHUB_ENV
-          echo "description=Ticket description goes here" >> $GITHUB_ENV
-          echo "priority=1" >> $GITHUB_ENV
-          echo "status=2" >> $GITHUB_ENV
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Create ticket in Freshservice
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create Freshservice Ticket
         env:
           FRESHSERVICE_API_KEY: ${{ secrets.FRESHSERVICE_API_KEY }}
-          FRESHSERVICE_SUBDOMAIN: senguntharengineeringcollehelpdesk
-          SUMMARY: ${{ env.summary }}
-          DESCRIPTION: ${{ env.description }}
-          PRIORITY: ${{ env.priority }}
-          STATUS: ${{ env.status }}
+          FRESHSERVICE_DOMAIN: senguntharengineeringcollehelpdesk
         run: |
-          FRESHSERVICE_API_URL="https://senguntharengineeringcollehelpdesk.freshservice.com/"
-          echo "---------------------------------"
-          curl -X POST $FRESHSERVICE_API_URL \
+          # Replace the following with your ticket details
+          ticketData='{
+            "helpdesk_ticket": {
+              "description": "This is a test ticket created via GitHub Actions pipeline.",
+              "subject": "GitHub Actions Ticket",
+              "priority": 1,
+              "status": 2
+            }
+          }'
+
+          # Send the request to create the ticket
+          response=$(curl -X POST "https://${FRESHSERVICE_DOMAIN}/api/v2/tickets" \
             -H "Content-Type: application/json" \
-            -H "Authorization: Basic $FRESHSERVICE_API_KEY" \
-            -d '{
-              "helpdesk_ticket": {
-                "description": "'"$DESCRIPTION"'",
-                "subject": "'"$SUMMARY"'",
-                "priority": '$PRIORITY',
-                "status": '$STATUS'
-              }
-            }'
+            -H "Authorization: Basic $(echo -n "${FRESHSERVICE_API_KEY}:x" | base64)" \
+            -d "$ticketData")
+
+          # Print the response (optional)
+          echo "Ticket Creation Response: $response"
