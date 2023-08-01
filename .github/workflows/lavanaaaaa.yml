@@ -35,11 +35,10 @@ jobs:
             }
           }'
 
-           response=$(curl -X POST "https://senguntharengineeringcollehelpdesk.freshservice.com/"
+          response=$(curl -X POST "https://senguntharengineeringcollehelpdesk.freshservice.com/" \
             -H "Content-Type: application/json" \
             -H "Authorization: Basic $(echo -n "${FRESHSERVICE_API_KEY}:x" | base64)" \
             -d "$ticketData")
 
           # Print the response (optional)
           echo "Ticket Creation Response: $response"
-
