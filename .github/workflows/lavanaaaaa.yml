@@ -35,11 +35,11 @@ jobs:
             }
           }'
 
-          # Send the request to create the ticket
-          response=$(curl -X POST "https://senguntharengineeringcollehelpdesk.freshservice.com/"
+           response=$(curl -X POST "https://${FRESHSERVICE_DOMAIN}/api/v2/tickets" \
             -H "Content-Type: application/json" \
             -H "Authorization: Basic $(echo -n "${FRESHSERVICE_API_KEY}:x" | base64)" \
             -d "$ticketData")
 
           # Print the response (optional)
+          echo "Ticket Creation Response: $response"
           echo "Ticket Creation Response: $response"
