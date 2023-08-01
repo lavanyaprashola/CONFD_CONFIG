@@ -9,9 +9,6 @@ jobs:
   create_ticket:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Input ticket details
         id: input_ticket_details
         run: |
@@ -25,9 +22,7 @@ jobs:
           FRESHSERVICE_API_KEY: ${{ secrets.FRESHSERVICE_API_KEY }}
           FRESHSERVICE_SUBDOMAIN: senguntharengineeringcollehelpdesk
         run: |
-          echo "next setpppp-----------------------------------------------"
           FRESHSERVICE_API_URL="https://senguntharengineeringcollehelpdesk.freshservice.com/"
-          echo "next setpppp-----------------------------------------------"
           SUMMARY="${{ steps.input_ticket_details.outputs.summary }}"
           DESCRIPTION="${{ steps.input_ticket_details.outputs.description }}"
           PRIORITY="${{ steps.input_ticket_details.outputs.priority }}"
