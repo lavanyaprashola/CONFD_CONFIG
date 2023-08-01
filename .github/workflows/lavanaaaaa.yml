@@ -42,4 +42,4 @@ jobs:
 
           # Print the response (optional)
           echo "Ticket Creation Response: $response"
-          echo "Ticket Creation Response: $response"
+
