@@ -2,7 +2,7 @@ name: Create Freshservice Ticket
 on:
   push:
     branches:
-      - main  # Replace with your main branch name
+      - lavanya  # Replace with your main branch name
   # You can adjust the trigger as per your requirements
 
 jobs:
