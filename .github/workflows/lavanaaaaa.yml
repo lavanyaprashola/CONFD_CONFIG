@@ -3,30 +3,30 @@ name: Create Freshservice Ticket
 on:
   push:
     branches:
-      - lavanya
+      - main
 
 jobs:
   create_ticket:
     runs-on: ubuntu-latest
     steps:
-      - name: Input ticket details
-        id: input_ticket_details
+      - name: Set up environment
+        id: env
         run: |
-          echo "::set-output name=summary::${{ github.event.head_commit.message }}"
-          echo "::set-output name=description::Ticket description goes here"
-          echo "::set-output name=priority::1"
-          echo "::set-output name=status::2"
+          echo "summary=${{ github.event.head_commit.message }}" >> $GITHUB_ENV
+          echo "description=Ticket description goes here" >> $GITHUB_ENV
+          echo "priority=1" >> $GITHUB_ENV
+          echo "status=2" >> $GITHUB_ENV
 
       - name: Create ticket in Freshservice
         env:
           FRESHSERVICE_API_KEY: ${{ secrets.FRESHSERVICE_API_KEY }}
           FRESHSERVICE_SUBDOMAIN: senguntharengineeringcollehelpdesk
+          SUMMARY: ${{ env.summary }}
+          DESCRIPTION: ${{ env.description }}
+          PRIORITY: ${{ env.priority }}
+          STATUS: ${{ env.status }}
         run: |
           FRESHSERVICE_API_URL="https://senguntharengineeringcollehelpdesk.freshservice.com/"
-          SUMMARY="${{ steps.input_ticket_details.outputs.summary }}"
-          DESCRIPTION="${{ steps.input_ticket_details.outputs.description }}"
-          PRIORITY="${{ steps.input_ticket_details.outputs.priority }}"
-          STATUS="${{ steps.input_ticket_details.outputs.status }}"
           echo "---------------------------------"
           curl -X POST $FRESHSERVICE_API_URL \
             -H "Content-Type: application/json" \
