@@ -27,7 +27,6 @@ jobs:
         run: |
           # Replace the following with your ticket details
           ticketData='{
-            "helpdesk_ticket": {
             "description": "This is a test ticket created via GitHub Actions pipeline.",
             "subject": "GitHub Actions Ticket",
             "email": "lavanyaprashola@gmail.com",
