@@ -26,6 +26,7 @@ jobs:
           FRESHSERVICE_SUBDOMAIN: senguntharengineeringcollehelpdesk
         run: |
           FRESHSERVICE_API_URL="https://senguntharengineeringcollehelpdesk.freshservice.com/"
+          echo "next setpppp"
           SUMMARY="${{ steps.input_ticket_details.outputs.summary }}"
           DESCRIPTION="${{ steps.input_ticket_details.outputs.description }}"
           PRIORITY="${{ steps.input_ticket_details.outputs.priority }}"
