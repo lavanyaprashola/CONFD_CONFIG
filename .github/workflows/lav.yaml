@@ -33,12 +33,8 @@ jobs:
           # Join the array elements with comma to form a comma-separated string
           CHANGED_FOLDER_LIST=$(IFS=','; echo "${CHANGED_FOLDERS[*]}")
 
-          # Check if there are any changed folders before setting the environment variable
-          if [ -n "$CHANGED_FOLDER_LIST" ]; then
-            echo "Changed folder(s): $CHANGED_FOLDER_LIST" >> $GITHUB_ENV
-          else
-            echo "No folders were changed." >> $GITHUB_ENV
-          fi
+          # Set the environment variable directly using echo
+          echo "Changed folder(s): $CHANGED_FOLDER_LIST" >> $GITHUB_ENV
 
       - name: Execute commands based on folder name
         run: |
