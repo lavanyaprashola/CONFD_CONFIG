@@ -15,8 +15,8 @@ jobs:
       - name: Extract Changed Folder
         id: extract_folder
         run: |
-          # Get the changed files from the commit range
-          CHANGED_FILES=$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}")
+          # Get the changed files from the commit range (between the previous commit and the current commit)
+          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
   
           # Extract the folder name from the changed file paths and store in an array
           CHANGED_FOLDERS=($(echo "${CHANGED_FILES}" | grep -o 'myapp/[^/]*' | sort -u))
