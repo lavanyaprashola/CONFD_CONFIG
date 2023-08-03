@@ -33,3 +33,4 @@ jobs:
             echo "Processing folder: $folder"
             npx serverless mono --app $folder --command "deploy --stage $STAGE"
           done
+
