@@ -3,6 +3,7 @@ on:
     branches:
 
       - main
+      - dev
 
 jobs:
 
@@ -16,6 +17,7 @@ jobs:
        uses: dorny/paths-filter@v2
        id: changes
        with:
+           base: "${GITHUB_REF##*/}"
            filters: |
               lavanya:
                 - 'myapp/lavanya**'
