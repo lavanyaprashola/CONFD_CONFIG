@@ -25,8 +25,8 @@ jobs:
           filters: |
             lavanya:
               - 'myapp/lavanya/**'
-            pavi-latest:
-              - 'myapp/pavi-latest/*'
+            pavi:
+              - 'myapp/pavi\-latest/**'
               
           
       - name: Execute commands based on folder name -notfication
@@ -35,6 +35,6 @@ jobs:
           npx serverless mono --app lavanya --command 'deploy --stage $STAGE'
      
       - name: Execute commands based on folder name -report
-        if: steps.changes.outputs.pavi-latest == 'true'
+        if: steps.changes.outputs.pavi == 'true'
         run: |
           echo "npx serverless mono --app pavi --command"
