@@ -11,7 +11,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      # ... (same as before)
 
       - name: Extract Changed Folder
         id: extract_folder
@@ -29,7 +28,7 @@ jobs:
 
       - name: Execute commands based on folder name
         run: |
-          for folder in $(echo $CHANGED_FOLDER_LIST | tr "," "\n"); do
+          for folder in $(echo "${{ env.CHANGED_FOLDER_LIST }}" | tr "," "\n"); do
             echo "Processing folder: $folder"
-            npx serverless mono --app $folder --command "deploy --stage $STAGE"
+            npx serverless mono --app $folder --command "deploy --stage production" # Replace 'production' with the appropriate stage
           done
