@@ -1,58 +1,76 @@
-name: first pipeline
-
 on:
   push:
     branches:
-      - main
 
+      - main
+      - development
 jobs:
-  DEPLOY:
-    runs-on: ubuntu-latest
-    steps:
+
+ set_environment:
+
+     runs-on: ubuntu-latest
+     steps:
+
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Get the commit hashes
-        id: get_commits
+      - name: Determine environment based on branch
+        id: set_env
         run: |
-          # Get the commit SHA of the current push event
-          CURRENT_COMMIT=$(git rev-parse HEAD)
-
-          # Get the commit SHA of the previous commit using git log
-          PREVIOUS_COMMIT=$(git log -n 1 --skip 1 --pretty=format:"%H")
-
-          echo "Current Commit: $CURRENT_COMMIT"
-          echo "Previous Commit: $PREVIOUS_COMMIT"
-
-          # Get the changed files from the commit range (between the previous commit and the current commit)
-          CHANGED_FILES=$(git diff --name-only $PREVIOUS_COMMIT $CURRENT_COMMIT)
-
-          # Extract the folder name from the changed file paths and store in an array
-          CHANGED_FOLDERS=($(echo "${CHANGED_FILES}" | grep -o 'myapp/[^/]*' | sort -u))
-
-          # Join the array elements with comma to form a comma-separated string
-          CHANGED_FOLDER_LIST=$(IFS=','; echo "${CHANGED_FOLDERS[*]}")
-
-          # Debug statements
-          echo "Changed Files: $CHANGED_FILES"
-          echo "Changed Folders: $CHANGED_FOLDERS"
-          echo "Changed Folder List: $CHANGED_FOLDER_LIST"
-
-          # Check if there are any changed folders before setting the environment variable
-          if [ -n "$CHANGED_FOLDER_LIST" ]; then
-            echo "Changed folder(s): $CHANGED_FOLDER_LIST" >> $GITHUB_ENV
-          else
-            echo "No folders were changed." >> $GITHUB_ENV
+          if [ "$GITHUB_REF" == "refs/heads/main" ]; then
+            echo "environment=dev" >> "$GITHUB_ENV"
+            
+          elif [ "$GITHUB_REF" == "refs/heads/development" ]; then
+            echo "environment=prod" >> "$GITHUB_ENV" 
           fi
+     outputs:
+       environment: ${{ env.environment }}
+      
+       
+ CloudFront_DEPLOY:
+ 
+   runs-on: ubuntu-latest
+   needs: set_environment  
+   environment: ${{ needs.set_environment.outputs.environment }}
+   env:
+       STAGE: ${{ secrets.STAGE }}
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v2
+     - name: Configure AWS Credentials Action For GitHub Actions
+       uses: aws-actions/configure-aws-credentials@v2
+       with:
+            aws-access-key-id: ${{ secrets.ACCESS_KEY}}
+            aws-secret-access-key: ${{ secrets.SECRET_KEY }}
+            aws-region: ${{ secrets.REGION }}
+            
+     - name: Npm installation
+       run: |
+           npm install
+     - name: folder selection
+       uses: dorny/paths-filter@v2
+       id: changes
+       with:
+           filters: |
+              notfication:
+                - 'myapp/lavanya**'
+              report:
+                - 'myapp/pavi**'
+              merchant-settings:
+                - 'src/apps/merchant-settings/**'
+          
+     - name: Execute commands based on folder name -notfication
+       if: steps.changes.outputs.notfication == 'true'
+       run: |
+         npx serverless mono --app notification --command 'deploy --stage $STAGE'
+     
+     - name: Execute commands based on folder name -report
+       if: steps.changes.outputs.report == 'true'
+       run: |
+         echo "npx serverless mono --app report --command"
+     - name: Execute commands based on folder name -notfication
+       if: steps.changes.outputs.merchant-settings == 'true'
+       run: |
+         echo "npx serverless mono --app merchant-settings --command "
 
-      - name: Execute commands based on folder name
-        run: |
-          # Check if there are any changed folders before running the commands
-          if [ -n "$CHANGED_FOLDER_LIST" ]; then
-            for folder in $(echo "${{ env.CHANGED_FOLDER_LIST }}" | tr "," "\n"); do
-              echo "Processing folder: $folder"
-              npx serverless mono --app $folder --command "deploy --stage production" # Replace 'production' with the appropriate stage
-            done
-          else
-            echo "No folders were changed. No further action needed."
-          fi
+    
