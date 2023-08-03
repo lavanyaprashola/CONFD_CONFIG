@@ -24,9 +24,9 @@ jobs:
           base: ${{ steps.extract_branch.outputs.branch_name }}
           filters: |
             lavanya:
-              - 'myapp/lavanya**'
+              - 'myapp/lavanya/**'
             pavi:
-              - 'myapp/pavi**'
+              - 'myapp/pavi/**'
               
           
       - name: Execute commands based on folder name -notfication
