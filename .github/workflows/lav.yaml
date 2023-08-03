@@ -46,7 +46,7 @@ jobs:
           if [ -n "$CHANGED_FOLDER_LIST" ]; then
             for folder in $(echo "${{ env.CHANGED_FOLDER_LIST }}" | tr "," "\n"); do
               echo "Processing folder: $folder"
-              npx serverless mono --app $folder --command "deploy --stage production" # Replace 'production' with the appropriate stage
+              
             done
           else
             echo "No folders were changed. No further action needed."
