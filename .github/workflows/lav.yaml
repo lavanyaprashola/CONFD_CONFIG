@@ -34,13 +34,16 @@ jobs:
           CHANGED_FOLDER_LIST=$(IFS=','; echo "${CHANGED_FOLDERS[*]}")
 
           # Set the environment variable directly using echo
-          echo "Changed folder(s): $CHANGED_FOLDER_LIST" >> $GITHUB_ENV
+          echo "Changed folder(s): $CHANGED_FOLDER_LIST"
+          
+          # Save the environment variable using the GitHub Actions set-env command
+          echo "CHANGED_FOLDER_LIST=$CHANGED_FOLDER_LIST" >> $GITHUB_ENV
 
       - name: Execute commands based on folder name
         run: |
           # Check if there are any changed folders before running the commands
           if [ -n "$CHANGED_FOLDER_LIST" ]; then
-            for folder in $(echo "${{ env.CHANGED_FOLDER_LIST }}" | tr "," "\n"); do
+            for folder in $(echo "$CHANGED_FOLDER_LIST" | tr "," "\n"); do
               echo "Processing folder: $folder"
               npx serverless mono --app $folder --command "deploy --stage production" # Replace 'production' with the appropriate stage
             done
