@@ -1,10 +1,10 @@
+name : first pipeline
 on:
   push:
     branches:
       - main
 
 jobs:
-
   Lamda_DEPLOY:
     runs-on: ubuntu-latest
     needs: set_environment
@@ -16,13 +16,11 @@ jobs:
       - name: Extract Changed Folder
         id: extract_folder
         run: |
-          # Get the changed files from the commit range
+          
           CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-
-          # Extract the folder name from the changed file paths and store in an array
+         
           CHANGED_FOLDERS=($(echo "${CHANGED_FILES}" | grep -o 'src/apps/[^/]*' | sort -u))
 
-          # Join the array elements with comma to form a comma-separated string
           CHANGED_FOLDER_LIST=$(IFS=','; echo "${CHANGED_FOLDERS[*]}")
 
           echo "Changed folder(s): $CHANGED_FOLDER_LIST" >> $GITHUB_ENV
