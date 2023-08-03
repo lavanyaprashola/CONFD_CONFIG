@@ -1,38 +1,40 @@
 on:
   push:
     branches:
-
       - main
       - branch
 
 jobs:
 
- set_environment:
+  set_environment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-     runs-on: ubuntu-latest
-     steps:
-     - name: Checkout code
-       uses: actions/checkout@v2
-     - name: folder selection
-       uses: dorny/paths-filter@v2
-       id: changes
-       with:
-           base: $(basename ${{ github.ref }})
-           filters: |
-              lavanya:
-                - 'myapp/lavanya**'
-              pavi:
-                - 'myapp/pavi**'
+      # Extract only the main part of the branch name
+      - name: Set base branch
+        id: extract_branch
+        run: echo "::set-output name=branch_name::${GITHUB_REF#refs/heads/}"
+
+      - name: folder selection
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          base: ${{ steps.extract_branch.outputs.branch_name }}
+          filters: |
+            lavanya:
+              - 'myapp/lavanya**'
+            pavi:
+              - 'myapp/pavi**'
               
           
-     - name: Execute commands based on folder name -notfication
-       if: steps.changes.outputs.lavanya == 'true'
-       run: |
-         npx serverless mono --app lavanya --command 'deploy --stage $STAGE'
+      - name: Execute commands based on folder name -notfication
+        if: steps.changes.outputs.lavanya == 'true'
+        run: |
+          npx serverless mono --app lavanya --command 'deploy --stage $STAGE'
      
-     - name: Execute commands based on folder name -report
-       if: steps.changes.outputs.pavi == 'true'
-       run: |
-         echo "npx serverless mono --app pavi --command"
-     
-    
+      - name: Execute commands based on folder name -report
+        if: steps.changes.outputs.pavi == 'true'
+        run: |
+          echo "npx serverless mono --app pavi --command"
