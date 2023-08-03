@@ -12,21 +12,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Extract Changed Folder
-        id: extract_folder
+      - name: Get the commit hashes
+        id: get_commits
         run: |
-          # Get the commit hash of the previous commit
-          PREVIOUS_COMMIT=$(git rev-parse HEAD^)
-          
+          # Get the commit SHA of the current push event
+          CURRENT_COMMIT=$(git rev-parse HEAD)
+
+          # Get the commit SHA of the previous commit using git log
+          PREVIOUS_COMMIT=$(git log -n 1 --skip 1 --pretty=format:"%H")
+
+          echo "Current Commit: $CURRENT_COMMIT"
+          echo "Previous Commit: $PREVIOUS_COMMIT"
+
           # Get the changed files from the commit range (between the previous commit and the current commit)
-          CHANGED_FILES=$(git diff --name-only $PREVIOUS_COMMIT HEAD)
-  
+          CHANGED_FILES=$(git diff --name-only $PREVIOUS_COMMIT $CURRENT_COMMIT)
+
           # Extract the folder name from the changed file paths and store in an array
           CHANGED_FOLDERS=($(echo "${CHANGED_FILES}" | grep -o 'myapp/[^/]*' | sort -u))
-  
+
           # Join the array elements with comma to form a comma-separated string
           CHANGED_FOLDER_LIST=$(IFS=','; echo "${CHANGED_FOLDERS[*]}")
-  
+
           echo "Changed folder(s): $CHANGED_FOLDER_LIST" >> $GITHUB_ENV
 
       - name: Execute commands based on folder name
