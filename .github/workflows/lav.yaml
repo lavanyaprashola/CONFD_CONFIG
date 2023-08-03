@@ -15,8 +15,11 @@ jobs:
       - name: Extract Changed Folder
         id: extract_folder
         run: |
+          # Get the commit hash of the previous commit
+          PREVIOUS_COMMIT=$(git rev-parse HEAD^)
+          
           # Get the changed files from the commit range (between the previous commit and the current commit)
-          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+          CHANGED_FILES=$(git diff --name-only $PREVIOUS_COMMIT HEAD)
   
           # Extract the folder name from the changed file paths and store in an array
           CHANGED_FOLDERS=($(echo "${CHANGED_FILES}" | grep -o 'myapp/[^/]*' | sort -u))
