@@ -40,6 +40,7 @@ jobs:
             echo "No folders were changed." >> $GITHUB_ENV
           fi
 
+
       - name: Execute commands based on folder name
         run: |
           # Check if there are any changed folders before running the commands
