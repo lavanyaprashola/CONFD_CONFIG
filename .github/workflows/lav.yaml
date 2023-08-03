@@ -33,11 +33,21 @@ jobs:
           # Join the array elements with comma to form a comma-separated string
           CHANGED_FOLDER_LIST=$(IFS=','; echo "${CHANGED_FOLDERS[*]}")
 
-          echo "Changed folder(s): $CHANGED_FOLDER_LIST" >> $GITHUB_ENV
+          # Check if there are any changed folders before setting the environment variable
+          if [ -n "$CHANGED_FOLDER_LIST" ]; then
+            echo "Changed folder(s): $CHANGED_FOLDER_LIST" >> $GITHUB_ENV
+          else
+            echo "No folders were changed." >> $GITHUB_ENV
+          fi
 
       - name: Execute commands based on folder name
         run: |
-          for folder in $(echo "${{ env.CHANGED_FOLDER_LIST }}" | tr "," "\n"); do
-            echo "Processing folder: $folder"
-            npx serverless mono --app $folder --command "deploy --stage production" # Replace 'production' with the appropriate stage
-          done
+          # Check if there are any changed folders before running the commands
+          if [ -n "$CHANGED_FOLDER_LIST" ]; then
+            for folder in $(echo "${{ env.CHANGED_FOLDER_LIST }}" | tr "," "\n"); do
+              echo "Processing folder: $folder"
+              npx serverless mono --app $folder --command "deploy --stage production" # Replace 'production' with the appropriate stage
+            done
+          else
+            echo "No folders were changed. No further action needed."
+          fi
