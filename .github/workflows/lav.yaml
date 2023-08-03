@@ -17,25 +17,20 @@ jobs:
        id: changes
        with:
            filters: |
-              notfication:
+              lavanya:
                 - 'myapp/lavanya**'
-              report:
+              pavi:
                 - 'myapp/pavi**'
-              merchant-settings:
-                - 'src/apps/merchant-settings/**'
+              
           
      - name: Execute commands based on folder name -notfication
-       if: steps.changes.outputs.notfication == 'true'
+       if: steps.changes.outputs.lavanya == 'true'
        run: |
-         npx serverless mono --app notification --command 'deploy --stage $STAGE'
+         npx serverless mono --app lavanya --command 'deploy --stage $STAGE'
      
      - name: Execute commands based on folder name -report
-       if: steps.changes.outputs.report == 'true'
+       if: steps.changes.outputs.pavi == 'true'
        run: |
-         echo "npx serverless mono --app report --command"
-     - name: Execute commands based on folder name -notfication
-       if: steps.changes.outputs.merchant-settings == 'true'
-       run: |
-         echo "npx serverless mono --app merchant-settings --command "
-
+         echo "npx serverless mono --app pavi --command"
+     
     
