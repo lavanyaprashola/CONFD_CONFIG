@@ -1,0 +1,44 @@
+on:
+  push:
+    branches:
+
+      - main
+  
+jobs:
+
+ set_environment:
+
+     runs-on: ubuntu-latest
+     steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Determine environment based on branch
+        id: set_env
+        run: |
+          if [ "$GITHUB_REF" == "refs/heads/main" ]; then
+            echo "environment=prod" >> "$GITHUB_ENV"
+            
+          elif [ "$GITHUB_REF" == "refs/heads/development" ]; then
+            echo "environment=dev" >> "$GITHUB_ENV" 
+          fi
+     outputs:
+       environment: ${{ env.environment }}
+      
+       
+ Folder_selection:
+ 
+   runs-on: ubuntu-latest
+   needs: set_environment  
+   outputs:
+      notification: ${{ steps.changes.outputs.notification }}
+      report: ${{ steps.changes.outputs.report }}
+      merchant-settings: ${{ steps.changes.outputs.merchant-settings }}
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v2
+     - name: print
+       run: |
+          echo "${GITHUB_REF##*/}"
+           
