@@ -27,6 +27,9 @@ jobs:
               - 'myapp/lavanya/**'
             pavi:
               - 'myapp/pavi-latest/**'
+            confd:
+              - 'myapp/confd/**'
+              
               
           
       - name: Execute commands based on folder name -notfication
@@ -38,3 +41,11 @@ jobs:
         if: steps.changes.outputs.pavi == 'true'
         run: |
           echo "npx serverless mono --app pavi --command"
+      - name: Execute commands based on folder name -pavi-latest
+        if: steps.Folder_selection.outputs.confd == 'true'
+        run: |
+           AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID }}
+           apps=("lavanya" "pavi")
+           for app in "${apps[@]}"; do
+                 echo "$app"
+           done
