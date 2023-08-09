@@ -43,3 +43,5 @@ jobs:
           for app in "${apps[@]}"; do
             echo "$app"
           done
+          
+          
