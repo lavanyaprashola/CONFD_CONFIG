@@ -1,85 +1,45 @@
 on:
   push:
     branches:
-
       - main
       - development
+
 jobs:
+  set_environment:
+    runs-on: ubuntu-latest
+    steps:
+      # ... your existing steps ...
 
- set_environment:
+  Folder_selection:
+    runs-on: ubuntu-latest
+    needs: set_environment
+    steps:
+      # ... your existing steps ...
 
-     runs-on: ubuntu-latest
-     steps:
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Determine environment based on branch
-        id: set_env
+  Lamda_DEPLOY:
+    runs-on: ubuntu-latest
+    needs:
+      - set_environment
+      - Folder_selection
+    environment: ${{ needs.set_environment.outputs.environment }}
+    env:
+      STAGE: ${{ secrets.STAGE }}
+    steps:
+      - name: Execute commands based on folder name -notfication
+        if: needs.Folder_selection.outputs.lavanya  == 'true'
         run: |
-          if [ "$GITHUB_REF" == "refs/heads/main" ]; then
-            echo "environment=prod" >> "$GITHUB_ENV"
-          
-            
-          elif [ "$GITHUB_REF" == "refs/heads/dev" ]; then
-            echo "environment=dev" >> "$GITHUB_ENV" 
-          fi
-     outputs:
-       environment: ${{ env.environment }}
-      
-       
- Folder_selection:
- 
-   runs-on: ubuntu-latest
-   needs: set_environment  
-   outputs:
-      pavi: ${{ steps.changes.outputs.pavi }}
-      lavanya: ${{ steps.changes.outputs.lavanya }}
-      confd: ${{ steps.changes.outputs.confd}}
-   steps:
-     - name: Checkout code
-       uses: actions/checkout@v2
-     - name: Set base branch
-       id: extract_branch
-       run: echo "::set-output name=branch_name::${GITHUB_REF#refs/heads/}"
-     - name: folder selection
-       uses: dorny/paths-filter@v2
-       id: changes
-       with:
-           base: "${GITHUB_REF##*/}"
-           filters: |
-              lavanya:
-                - 'myapp/lavanya**'
-              pavi:
-                - 'myapp/pavi**'
-              confd:
-                - 'myapp/confd**'
-    
- Lamda_DEPLOY:
-   runs-on: ubuntu-latest
-   needs: 
-           - set_environment
-           - Folder_selection 
-   environment: ${{ needs.set_environment.outputs.environment }}
-   env:
-       STAGE: ${{ secrets.STAGE }}
-   steps :
-          
-     - name: Execute commands based on folder name -notfication
-       if: needs.Folder_selection.outputs.lavanya  == 'true'
-       run: |
-         echo "npx serverless mono --app lavanyammand 'deploy --stage $STAGE'"
+          echo "npx serverless mono --app lavanya --command 'deploy --stage $STAGE'"
      
-     - name: Execute commands based on folder name -report
-       if: needs.Folder_selection.outputs.pavi  == 'true'
-       run: |
-         echo "npx serverless mono --app pavi --command"
-     - name: Execute commands based on folder name -libs
-       if: steps.Folder_selection.outputs.confd == 'true'
-       run: |
-           AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID }}
-           apps=("lavanya" "pavi" )
-           for app in "${apps[@]}"; do
-                  echo "$app"
-           done
-    
+      - name: Execute commands based on folder name -report
+        if: needs.Folder_selection.outputs.pavi  == 'true'
+        run: |
+          echo "npx serverless mono --app pavi --command 'deploy --stage $STAGE'"
+     
+      - name: Execute commands based on folder name -libs
+        if: steps.Folder_selection.outputs.confd == 'true'
+        run: |
+          AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID }}
+          apps=("lavanya" "pavi")
+          for app in "${apps[@]}"; do
+            echo "$app"
+          done
