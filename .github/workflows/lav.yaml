@@ -39,9 +39,6 @@ jobs:
    steps:
      - name: Checkout code
        uses: actions/checkout@v2
-     - name: Set base branch
-       id: extract_branch
-       run: echo "::set-output name=branch_name::${GITHUB_REF#refs/heads/}"
      - name: folder selection
        uses: dorny/paths-filter@v2
        id: changes
