@@ -1,22 +1,61 @@
 on:
   push:
     branches:
+
       - main
       - development
-
 jobs:
-  set_environment:
-    runs-on: ubuntu-latest
-    steps:
-      # ... your existing steps ...
 
-  Folder_selection:
-    runs-on: ubuntu-latest
-    needs: set_environment
-    steps:
-      # ... your existing steps ...
+ set_environment:
 
-  Lamda_DEPLOY:
+     runs-on: ubuntu-latest
+     steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Determine environment based on branch
+        id: set_env
+        run: |
+          if [ "$GITHUB_REF" == "refs/heads/main" ]; then
+            echo "environment=prod" >> "$GITHUB_ENV"
+          
+            
+          elif [ "$GITHUB_REF" == "refs/heads/dev" ]; then
+            echo "environment=dev" >> "$GITHUB_ENV" 
+          fi
+     outputs:
+       environment: ${{ env.environment }}
+      
+       
+ Folder_selection:
+ 
+   runs-on: ubuntu-latest
+   needs: set_environment  
+   outputs:
+      pavi: ${{ steps.changes.outputs.pavi }}
+      lavanya: ${{ steps.changes.outputs.lavanya }}
+      confd: ${{ steps.changes.outputs.confd}}
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v2
+     - name: Set base branch
+       id: extract_branch
+       run: echo "::set-output name=branch_name::${GITHUB_REF#refs/heads/}"
+     - name: folder selection
+       uses: dorny/paths-filter@v2
+       id: changes
+       with:
+           base: "${GITHUB_REF##*/}"
+           filters: |
+              lavanya:
+                - 'myapp/lavanya**'
+              pavi:
+                - 'myapp/pavi**'
+              confd:
+                - 'myapp/confd**'
+    
+ Lamda_DEPLOY:
     runs-on: ubuntu-latest
     needs:
       - set_environment
